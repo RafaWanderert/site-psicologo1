@@ -1,0 +1,7 @@
+# Quebras de linha sempre LF, no Windows e no Render.
+# O hash da CSP (render.yaml) depende do texto exato do script no index.html.
+* text=auto eol=lf
+*.webp binary
+*.jpg binary
+*.png binary
+*.woff2 binary

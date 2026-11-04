@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <!-- Título, descrição, nome e domínio vêm de src/content/site.ts (veja vite.config.ts) -->
+    <title>{{titulo}}</title>
+    <meta name="description" content="{{descricao}}" />
+    <!-- Projeto de portfólio com profissional fictícia: fora do Google. Para um cliente real, volte para "index, follow". -->
+    <meta name="robots" content="noindex, follow" />
+    <link rel="canonical" href="{{url}}/" />
+    <meta name="theme-color" content="#E8F2F9" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content="{{nome}}" />
+    <meta property="og:title" content="{{titulo}}" />
+    <meta property="og:description" content="{{descricao}}" />
+    <meta property="og:url" content="{{url}}/" />
+    <meta property="og:image" content="{{url}}/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="{{nome}}, psicóloga clínica, sorrindo num sofá claro, ao lado do nome e do título do site" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script>
+      // Com JavaScript, as seções entram com animação ao rolar. Se o app não carregar em 4 s, mostra tudo.
+      document.documentElement.classList.add('js')
+      setTimeout(function () {
+        if (!window.__revelar) document.documentElement.classList.remove('js')
+      }, 4000)
+    </script>
+
+    <!-- Google Tag Manager: cole aqui o snippet do <head> do GTM (GTM-XXXXXXX).
+         Cada clique no WhatsApp já envia o evento "whatsapp_click" para window.dataLayer,
+         com a origem: header, hero, tema, contato, flutuante ou rodape. -->
+  </head>
+  <body>
+    <!-- Google Tag Manager (noscript): cole aqui o trecho <noscript> do GTM. -->
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

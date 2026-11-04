@@ -1,0 +1,1623 @@
+@import 'tailwindcss';
+
+/* =====================================================================
+   Layout do Figma (quadro de 1440px): azul-claro e branco, Lora + Inter.
+   Os valores em px valem para 1440px; abaixo disso os tamanhos encolhem
+   com clamp() e as colunas se empilham (900px e 560px).
+   ===================================================================== */
+
+:root {
+  --tinta-forte: #1e3444; /* títulos grandes */
+  --tinta: #253f50; /* títulos, menu, rótulos */
+  --azul: #315f7c; /* sobretítulos, links, ícones */
+  --azul-escuro: #2a5570;
+  --azul-claro: #3c7896;
+  --texto: #5d7180; /* texto corrido */
+  --texto-forte: #4a6475; /* texto sobre a faixa azul */
+  /* Texto pequeno sobre os azuis mais fortes (contato e rodapé): um pouco mais escuro
+     que no Figma para passar no contraste AA (4,5:1). No Figma, o rodapé dava 3,5:1. */
+  --texto-no-azul: #44606f;
+  --linha: #c8d9e5;
+  --linha-forte: #b8d0dd;
+  --creme: #ede9de;
+  --onda: #96b3c4;
+
+  --fundo-topo: linear-gradient(90deg, #e8f2f9 0%, #f1f7fb 50%, #edf5f0 100%);
+  --recuo: clamp(20px, 6.111vw, 88px); /* margem lateral: 88px em 1440px */
+  --topo-fixo: 101px; /* altura do cabeçalho fixo, para as âncoras */
+}
+
+@theme {
+  --color-*: initial;
+  --color-tinta: #253f50;
+  --color-azul: #315f7c;
+  --color-texto: #5d7180;
+  --color-linha: #c8d9e5;
+  --font-*: initial;
+  --font-serif: 'Lora Variable', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+}
+
+/* ============================== Base ============================== */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    background: #f7fafc;
+    color: var(--texto);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  [id] {
+    scroll-margin-top: var(--topo-fixo);
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    color: var(--tinta);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--azul);
+    outline-offset: 3px;
+  }
+
+  ::selection {
+    background: rgb(49 95 124 / 0.18);
+  }
+
+  ::placeholder {
+    color: var(--texto);
+    opacity: 1;
+  }
+}
+
+/* =========================== Componentes =========================== */
+@layer components {
+  .recipiente {
+    width: 100%;
+    max-width: 1440px;
+    margin-inline: auto;
+    padding-inline: max(var(--recuo), env(safe-area-inset-left)) max(var(--recuo), env(safe-area-inset-right));
+  }
+
+  .pular {
+    position: absolute;
+    top: -100px;
+    left: 16px;
+    z-index: 100;
+    padding: 10px 16px;
+    border-radius: 6px;
+    background: var(--azul-escuro);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .pular:focus {
+    top: 12px;
+  }
+
+  /* Sobretítulo: Inter 11px, maiúsculas, bem espaçado */
+  .sobretitulo {
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 16px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--azul);
+  }
+
+  .titulo-secao {
+    margin-top: 17px;
+    font-size: clamp(32px, 27.77px + 1.127vw, 44px);
+    line-height: 1.18;
+    letter-spacing: -0.022em;
+    color: var(--tinta);
+  }
+
+  /* ---------- Botões ---------- */
+  .botao {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 28px;
+    height: 52px;
+    padding: 0 26px 0 24px;
+    border: 0;
+    border-radius: 6px;
+    background: linear-gradient(90deg, var(--azul-escuro), var(--azul-claro));
+    box-shadow:
+      0 1px 2px rgb(42 85 112 / 0.18),
+      0 8px 16px -12px rgb(42 85 112 / 0.5);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+      filter 0.2s ease,
+      box-shadow 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .botao svg {
+    flex: none;
+    width: 12px;
+    height: 12px;
+    transition: transform 0.2s ease;
+  }
+
+  .botao:hover {
+    filter: brightness(1.08);
+    box-shadow:
+      0 1px 2px rgb(42 85 112 / 0.18),
+      0 12px 22px -12px rgb(42 85 112 / 0.55);
+  }
+
+  .botao:hover svg {
+    transform: translate(2px, -2px);
+  }
+
+  .botao:disabled {
+    cursor: progress;
+    filter: saturate(0.6);
+  }
+
+  .botao--claro {
+    gap: 26px;
+    border: 1px solid #c8d9e6;
+    background: linear-gradient(90deg, rgb(49 95 124 / 0.09), rgb(49 95 124 / 0.04));
+    box-shadow: none;
+    color: var(--tinta);
+    font-weight: 500;
+  }
+
+  .botao--claro svg {
+    color: var(--azul);
+  }
+
+  .botao--claro:hover {
+    filter: none;
+    border-color: #a9c2d4;
+    background: linear-gradient(90deg, rgb(49 95 124 / 0.13), rgb(49 95 124 / 0.07));
+    box-shadow: none;
+  }
+
+  .link-sublinhado {
+    padding: 0;
+    background: none;
+    border: 0;
+    color: var(--azul);
+    font-size: 14px;
+    line-height: 1.4;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    cursor: pointer;
+  }
+
+  .link-sublinhado:hover {
+    color: var(--azul-escuro);
+    text-decoration-thickness: 2px;
+  }
+
+  /* ---------- Marca ---------- */
+  .marca {
+    display: inline-flex;
+    align-items: center;
+    gap: 15px;
+    color: var(--tinta);
+  }
+
+  .marca__selo {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    padding-bottom: 2px;
+    border-radius: 50%;
+    background: linear-gradient(90deg, #30627f, #4a8ca7);
+    color: #fff;
+    font-family: var(--font-serif);
+    font-size: 17px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .marca__nome {
+    font-family: var(--font-serif);
+    font-size: 24px;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+
+  /* ---------- Cabeçalho ---------- */
+  .cabecalho {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    border-bottom: 1px solid #c8d9e6;
+    background: var(--fundo-topo);
+  }
+
+  .cabecalho__linha {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    height: 100px;
+  }
+
+  .menu {
+    display: none;
+  }
+
+  .menu ul {
+    display: flex;
+    gap: 28px;
+  }
+
+  .menu a {
+    font-size: 13.5px;
+    line-height: 1.4;
+    color: var(--tinta);
+    transition: color 0.2s ease;
+  }
+
+  .menu a:hover {
+    color: var(--azul);
+    text-decoration: underline;
+    text-underline-offset: 6px;
+  }
+
+  .cabecalho__acoes {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .cabecalho__agendar {
+    display: none;
+  }
+
+  .hamburguer {
+    display: inline-grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    margin-right: -10px;
+    border-radius: 6px;
+    color: var(--tinta);
+    cursor: pointer;
+  }
+
+  .hamburguer svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .menu-movel {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    padding: 4px 0 24px;
+    border-bottom: 1px solid #c8d9e6;
+    background: #f3f8fc;
+    box-shadow: 0 24px 40px -24px rgb(37 63 80 / 0.3);
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-6px);
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease,
+      visibility 0s linear 0.2s;
+  }
+
+  .menu-movel[data-aberto='true'] {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .menu-movel li + li {
+    border-top: 1px solid var(--linha);
+  }
+
+  .menu-movel li a:not(.botao) {
+    display: flex;
+    align-items: center;
+    min-height: 52px;
+    font-size: 17px;
+    color: var(--tinta);
+  }
+
+  .menu-movel .menu-movel__agendar {
+    padding-top: 20px;
+    border-top: 0;
+  }
+
+  .menu-movel__agendar .botao {
+    width: 100%;
+  }
+
+  /* ---------- Abertura ---------- */
+  .inicio {
+    background: var(--fundo-topo);
+  }
+
+  .inicio__grade {
+    display: grid;
+    gap: 48px;
+    padding-block: 48px 56px;
+  }
+
+  .inicio__titulo {
+    max-width: 640px;
+    margin-top: 24px;
+    padding-bottom: 0.08em; /* o recorte do degradê não corta as descendentes */
+    font-size: clamp(38px, 29.55px + 2.2535vw, 62px);
+    line-height: 1.13;
+    letter-spacing: -0.02em;
+    color: var(--tinta-forte);
+    background: linear-gradient(90deg, #1e3444 0%, #36637d 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .inicio__apoio {
+    max-width: 500px;
+    margin-top: 22px;
+    font-size: 17px;
+    line-height: 30px;
+  }
+
+  .inicio__acoes {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px 28px;
+    margin-top: 32px;
+  }
+
+  .inicio__meta {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-top: 36px;
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  .inicio__meta svg {
+    flex: none;
+    width: 17px;
+    height: 17px;
+    color: var(--azul);
+    stroke-width: 1.75;
+  }
+
+  /* Retrato: moldura com a foto recortada em arco no canto de cima à esquerda.
+     As medidas do arco são frações da largura da moldura (cqi), então ele
+     acompanha a moldura em qualquer tamanho. */
+  .retrato {
+    width: 100%;
+    max-width: 488px;
+    justify-self: center;
+  }
+
+  .retrato__quadro {
+    position: relative;
+    container-type: inline-size;
+    aspect-ratio: 488 / 559;
+    overflow: hidden;
+    border-radius: 12px;
+    background: var(--creme);
+  }
+
+  .retrato__anel {
+    position: absolute;
+    top: -4.92cqi;
+    left: -7.38cqi;
+    width: 103.28cqi;
+    height: 103.28cqi;
+    border: 1px solid #a5b7aa;
+    border-radius: 50%;
+  }
+
+  .retrato__arco {
+    position: absolute;
+    inset: 0;
+    -webkit-mask:
+      radial-gradient(circle 56.15cqi at 52.66cqi 54.92cqi, #000 99.6%, transparent 100%),
+      linear-gradient(#000 0 0) right top / calc(100% - 40.98cqi) 100% no-repeat,
+      linear-gradient(#000 0 0) left bottom / 100% calc(100% - 35.45cqi) no-repeat;
+    mask:
+      radial-gradient(circle 56.15cqi at 52.66cqi 54.92cqi, #000 99.6%, transparent 100%),
+      linear-gradient(#000 0 0) right top / calc(100% - 40.98cqi) 100% no-repeat,
+      linear-gradient(#000 0 0) left bottom / 100% calc(100% - 35.45cqi) no-repeat;
+  }
+
+  /* Enquadramento igual ao do Figma: a foto um pouco maior que a moldura */
+  .retrato__arco img {
+    position: absolute;
+    top: -3.58%;
+    left: -3.69%;
+    width: 106.76%;
+    max-width: none;
+    height: auto;
+  }
+
+  .retrato__legenda {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    height: 33px;
+    padding-bottom: 1px;
+    background: linear-gradient(180deg, rgb(110 150 168 / 0.16), rgb(110 150 168 / 0));
+    font-size: 11px;
+    line-height: 16px;
+    color: #566a79; /* 5:1 sobre a faixa da legenda (no Figma, 4,4:1) */
+  }
+
+  .retrato__nome {
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ---------- Faixa abaixo da abertura ---------- */
+  .faixa {
+    border-bottom: 1px solid #d4e1e9;
+    background: linear-gradient(90deg, #fdfefe, #fbfdfb);
+  }
+
+  .faixa__linha {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px 24px;
+    min-height: 72px;
+    padding-block: 16px;
+  }
+
+  .faixa__frase {
+    font-family: var(--font-serif);
+    font-size: clamp(19px, 17.94px + 0.2817vw, 22px);
+    line-height: 1.3;
+    color: var(--tinta);
+  }
+
+  .faixa__nota {
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  /* ---------- Seções ---------- */
+  .secao {
+    padding-block: clamp(64px, 52.73px + 3.005vw, 96px);
+  }
+
+  .cabeca {
+    display: grid;
+    gap: 20px;
+  }
+
+  .cabeca__apoio {
+    font-size: 15px;
+    line-height: 26px;
+  }
+
+  .duas-colunas {
+    display: grid;
+    gap: 32px;
+  }
+
+  /* Temas */
+  .temas {
+    background: linear-gradient(100deg, #f7fafc 0%, #fdfefe 60%, #ffffff 100%);
+  }
+
+  .temas__lista {
+    display: grid;
+    margin-top: 40px;
+    border-top: 1px solid var(--linha);
+  }
+
+  .tema {
+    padding: 26px 0 23px;
+    border-bottom: 1px solid var(--linha);
+  }
+
+  .tema__nome {
+    font-size: clamp(24px, 22.59px + 0.3756vw, 28px);
+    line-height: 36px;
+    letter-spacing: -0.02em;
+  }
+
+  .tema__texto {
+    margin-top: 10px;
+    font-size: 14px;
+    line-height: 22px;
+  }
+
+  /* Sobre */
+  .sobre {
+    position: relative;
+    background: linear-gradient(115deg, #f3f8fb 0%, #fdfefe 45%, #f7fafc 100%);
+  }
+
+  .sobre::before {
+    content: '';
+    position: absolute;
+    top: 17px;
+    left: var(--recuo);
+    right: var(--recuo);
+    height: 1px;
+    background: linear-gradient(90deg, rgb(213 226 234 / 0), #d5e2ea 25%, #d5e2ea 75%, rgb(213 226 234 / 0));
+  }
+
+  .sobre__nome {
+    margin-top: 22px;
+    padding-bottom: 0.08em;
+    font-size: clamp(38px, 33.42px + 1.2207vw, 51px);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--tinta-forte);
+    background: linear-gradient(90deg, #1e3444 0%, #2c5068 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .sobre__funcao {
+    margin-top: 17px;
+    font-size: 14px;
+    line-height: 22px;
+    color: var(--azul);
+  }
+
+  .sobre__chamada {
+    max-width: 690px;
+    font-family: var(--font-serif);
+    font-size: clamp(24px, 21.89px + 0.5634vw, 30px);
+    line-height: 1.433;
+    letter-spacing: -0.005em;
+    color: var(--tinta);
+  }
+
+  .sobre__texto p + p {
+    margin-top: 24px;
+  }
+
+  .sobre__texto p:not(.sobre__chamada) {
+    font-size: 16px;
+    line-height: 30px;
+  }
+
+  .sobre__chamada + p {
+    margin-top: 26px;
+  }
+
+  /* Abordagem */
+  .abordagem {
+    padding-block: clamp(64px, 57.6px + 1.7vw, 84px) clamp(64px, 58.4px + 1.5vw, 80px);
+    background: linear-gradient(90deg, #d6eaf4 0%, #e2f0f8 50%, #d0e8f2 100%);
+  }
+
+  .abordagem__titulo {
+    margin-top: 20px;
+    color: var(--tinta-forte);
+  }
+
+  .onda {
+    display: block;
+    width: 212px;
+    height: 56px;
+    margin-top: 24px;
+    fill: none;
+    stroke: var(--onda);
+    stroke-width: 1.2;
+  }
+
+  .abordagem__texto p {
+    font-size: 16px;
+    line-height: 30px;
+    color: var(--texto-forte);
+  }
+
+  .abordagem__texto .abordagem__chamada {
+    letter-spacing: -0.006em;
+    font-size: 17px;
+    line-height: 31px;
+    color: var(--tinta);
+  }
+
+  .abordagem__texto .abordagem__chamada + p {
+    margin-top: 19px;
+  }
+
+  .abordagem__texto p + .abordagem__frase {
+    margin-top: 27px;
+  }
+
+  .abordagem__texto .abordagem__frase {
+    font-family: var(--font-serif);
+    font-size: 21px;
+    font-style: italic;
+    line-height: 30px;
+    color: var(--azul-escuro);
+  }
+
+  /* Como funciona */
+  .processo {
+    background: linear-gradient(90deg, #f4f9fb 0%, #ffffff 55%);
+  }
+
+  .passos {
+    display: grid;
+    gap: 40px 48px;
+    margin-top: 44px;
+  }
+
+  .passo {
+    padding-top: 22px;
+    border-top: 1px solid #c6d8e2;
+  }
+
+  .passo__numero {
+    display: block;
+    width: fit-content;
+    font-family: var(--font-serif);
+    font-size: clamp(28px, 26.59px + 0.3756vw, 32px);
+    line-height: 40px;
+    color: #2c5974;
+    background: linear-gradient(90deg, #2a5570 0%, #4a8ca7 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .passo__titulo {
+    margin-top: 22px;
+    font-size: clamp(23px, 21.94px + 0.2817vw, 26px);
+    line-height: 34px;
+    letter-spacing: -0.02em;
+  }
+
+  .passo__texto {
+    margin-top: 10px;
+    font-size: 15px;
+    line-height: 27px;
+  }
+
+  /* Contato */
+  .contato {
+    padding-block: clamp(64px, 58.4px + 1.5vw, 80px);
+    background: linear-gradient(90deg, #c8dfed 0%, #d5eaf4 50%, #c5dfee 100%);
+  }
+
+  .contato__grade {
+    display: grid;
+    gap: 40px;
+  }
+
+  .contato__titulo {
+    max-width: 620px;
+    margin-top: 21px;
+    padding-bottom: 0.08em;
+    font-size: clamp(34px, 27.66px + 1.69vw, 52px);
+    line-height: 1.173;
+    letter-spacing: -0.03em;
+    color: #1d3343;
+    background: linear-gradient(20deg, #2a4c63 0%, #1d3343 55%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .contato__apoio {
+    max-width: 460px;
+    margin-top: 18px;
+    font-size: 16px;
+    line-height: 29px;
+    color: #3d5a6a;
+  }
+
+  .contato__nota {
+    max-width: 420px;
+    margin-top: 24px;
+    font-size: 12px;
+    line-height: 20px;
+    color: var(--texto-no-azul);
+  }
+
+  .formulario {
+    display: grid;
+    gap: 19px;
+  }
+
+  .campo {
+    display: grid;
+    gap: 8px;
+  }
+
+  .campo label {
+    font-size: 12px;
+    line-height: 18px;
+    color: var(--tinta);
+  }
+
+  .campo input,
+  .campo textarea {
+    width: 100%;
+    padding: 0 15px;
+    border: 1px solid var(--linha-forte);
+    border-radius: 6px;
+    background: #fdfefe;
+    color: var(--tinta);
+    font: inherit;
+    font-size: 16px;
+    transition:
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .campo input {
+    height: 48px;
+    padding-bottom: 5px;
+  }
+
+  .campo textarea {
+    display: block;
+    height: 95px;
+    padding-block: 12px;
+    line-height: 1.5;
+    resize: none;
+  }
+
+  .campo input:focus,
+  .campo textarea:focus {
+    border-color: var(--azul);
+    outline: none;
+    box-shadow: 0 0 0 3px rgb(49 95 124 / 0.18);
+  }
+
+  .campo [aria-invalid='true'] {
+    border-color: #a33d3d;
+  }
+
+  .campo__erro {
+    font-size: 12px;
+    line-height: 18px;
+    color: #8e2f2f;
+  }
+
+  .formulario__enviar {
+    justify-self: start;
+    min-width: 240px;
+    margin-top: 2px;
+  }
+
+  /* Campo-isca contra spam: existe no formulário, mas fica fora da tela */
+  .isca {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .formulario {
+    position: relative;
+  }
+
+  .formulario__urgencia {
+    margin-top: 1px;
+    font-size: 11px;
+    line-height: 18px;
+    color: var(--texto-no-azul);
+  }
+
+  .contato__aviso {
+    padding: 28px;
+    border: 1px solid var(--linha-forte);
+    border-radius: 6px;
+    background: #fdfefe;
+    color: var(--texto);
+    font-size: 15px;
+    line-height: 26px;
+  }
+
+  .contato__aviso:focus {
+    outline: none;
+  }
+
+  .contato__aviso-titulo {
+    margin-bottom: 6px;
+    font-family: var(--font-serif);
+    font-size: 24px;
+    line-height: 1.3;
+    color: var(--tinta);
+  }
+
+  .contato__aviso-acoes {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px 24px;
+    margin-top: 20px;
+  }
+
+  /* ---------- Rodapé ---------- */
+  .rodape {
+    border-top: 1px solid var(--linha-forte);
+    background: linear-gradient(90deg, #c5ddec 0%, #cce3ef 35%, #bedaea 100%);
+  }
+
+  .rodape__linha {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px 32px;
+    padding-block: 33px;
+  }
+
+  .rodape__centro {
+    font-size: 12px;
+    line-height: 18px;
+    color: var(--texto-no-azul);
+  }
+
+  .rodape__topo {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    line-height: 18px;
+    color: var(--azul);
+  }
+
+  .rodape__topo svg {
+    width: 11px;
+    height: 11px;
+  }
+
+  .rodape__portfolio {
+    flex-basis: 100%;
+    padding-top: 16px;
+    border-top: 1px solid rgb(169 196 214 / 0.6);
+    font-size: 12px;
+    line-height: 18px;
+    color: var(--texto-no-azul);
+  }
+
+  .rodape__topo:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  /* ---------- Revelação ao rolar ---------- */
+  @media (prefers-reduced-motion: no-preference) {
+    .js [data-revelar] {
+      opacity: 0;
+      transform: translateY(14px);
+      transition:
+        opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .js [data-revelar].revelado {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* ======================= Telas maiores ======================= */
+  @media (width > 560px) {
+    .campo input,
+    .campo textarea {
+      font-size: 13px;
+    }
+
+    .cabecalho__agendar {
+      display: inline-flex;
+    }
+
+    .menu-movel .menu-movel__agendar {
+      display: none;
+    }
+  }
+
+  @media (width > 760px) {
+    .temas__lista {
+      grid-template-columns: 1fr 1fr;
+      column-gap: 64px;
+      border-top: 0;
+    }
+
+    .tema:nth-child(-n + 2) {
+      border-top: 1px solid var(--linha);
+    }
+
+    .passos {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (width > 1080px) {
+    .menu {
+      display: block;
+    }
+
+    .hamburguer,
+    .menu-movel {
+      display: none;
+    }
+  }
+
+  @media (width > 900px) {
+    /* a coluna da foto encolhe antes da coluna do texto */
+    .inicio__grade {
+      grid-template-columns: minmax(400px, 1fr) minmax(0, 504px);
+      align-items: center;
+      column-gap: 64px;
+      padding-block: 57px 55px;
+    }
+
+    .retrato {
+      justify-self: stretch;
+      width: auto;
+      margin-right: 16px;
+    }
+
+    .cabeca {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+      gap: 48px;
+    }
+
+    .temas__apoio {
+      width: 365px;
+    }
+
+    .processo__apoio {
+      width: 315px;
+    }
+
+    .duas-colunas {
+      grid-template-columns: minmax(0, 482fr) minmax(0, 718fr);
+      column-gap: 64px;
+    }
+
+    .sobre {
+      padding-block: 89px 96px;
+    }
+
+    .abordagem {
+      padding-block: 84px 76px;
+    }
+
+    .contato {
+      padding-block: 80px 79px;
+    }
+
+    .processo {
+      padding-block: 95px 97px;
+    }
+
+    .passos {
+      margin-top: 48px;
+    }
+
+    .contato__grade {
+      grid-template-columns: minmax(0, 632fr) minmax(0, 536fr);
+      column-gap: clamp(48px, 6.667vw, 96px);
+    }
+  }
+}
+
+@media (forced-colors: active) {
+  .inicio__titulo,
+  .sobre__nome,
+  .contato__titulo,
+  .passo__numero {
+    background: none;
+    -webkit-text-fill-color: currentColor;
+  }
+}
+
+/* =====================================================================
+   Degradês e máscaras (gradient mask)
+   Motivo: a escuta. Anéis concêntricos que partem do anel da foto e se
+   dissolvem por máscara; linhas que somem nas pontas; foto que se funde
+   ao fundo. Tudo decorativo, atrás do conteúdo (pseudo-elementos).
+   ===================================================================== */
+@layer components {
+  :root {
+    --anel-cor: rgb(49 95 124 / 0.2);
+    --linha-some: linear-gradient(
+      90deg,
+      rgb(200 217 229 / 0) 0%,
+      var(--linha) 14%,
+      var(--linha) 86%,
+      rgb(200 217 229 / 0) 100%
+    );
+  }
+
+  /* Cabeçalho translúcido: o conteúdo passa por baixo desfocado */
+  .cabecalho {
+    border-bottom: 0;
+    background: linear-gradient(90deg, rgb(232 242 249 / 0.82) 0%, rgb(241 247 251 / 0.82) 50%, rgb(237 245 240 / 0.82) 100%);
+    -webkit-backdrop-filter: blur(14px) saturate(1.2);
+    backdrop-filter: blur(14px) saturate(1.2);
+  }
+
+  .cabecalho::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: linear-gradient(90deg, rgb(200 217 230 / 0.2), #c8d9e6 30%, #b9d0e0 70%, rgb(200 217 230 / 0.2));
+  }
+
+  /* Seções com decoração própria */
+  .inicio,
+  .abordagem,
+  .contato {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  .inicio::before,
+  .inicio::after,
+  .abordagem::before,
+  .abordagem::after,
+  .contato::before,
+  .contato::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* Abertura: brilho atrás da foto + anéis que se espalham e somem */
+  .inicio {
+    --cx: 50%;
+    --cy: 74%;
+  }
+
+  .inicio::before {
+    background:
+      radial-gradient(38rem 30rem at var(--cx) var(--cy), rgb(255 255 255 / 0.75), rgb(255 255 255 / 0) 70%),
+      radial-gradient(30rem 22rem at 8% 0%, rgb(196 222 238 / 0.55), rgb(196 222 238 / 0) 70%);
+  }
+
+  .inicio::after {
+    background: repeating-radial-gradient(
+      circle at var(--cx) var(--cy),
+      transparent 0 47px,
+      var(--anel-cor) 47px 48px
+    );
+    -webkit-mask-image: radial-gradient(46rem 38rem at var(--cx) var(--cy), #000 20%, rgb(0 0 0 / 0.45) 50%, transparent 75%);
+    mask-image: radial-gradient(46rem 38rem at var(--cx) var(--cy), #000 20%, rgb(0 0 0 / 0.45) 50%, transparent 75%);
+  }
+
+  /* Foto: a base se dissolve no creme da moldura; o anel some na diagonal */
+  .retrato__arco img {
+    -webkit-mask-image: linear-gradient(180deg, #000 72%, rgb(0 0 0 / 0.55) 90%, rgb(0 0 0 / 0.25) 100%);
+    mask-image: linear-gradient(180deg, #000 72%, rgb(0 0 0 / 0.55) 90%, rgb(0 0 0 / 0.25) 100%);
+  }
+
+  .retrato__quadro {
+    background: linear-gradient(180deg, #ede9de 0%, #e6ecea 100%);
+    box-shadow: 0 30px 60px -40px rgb(37 63 80 / 0.45);
+  }
+
+  .retrato__anel {
+    border-color: #9fb4a8;
+    -webkit-mask-image: linear-gradient(150deg, #000 25%, rgb(0 0 0 / 0.15) 80%);
+    mask-image: linear-gradient(150deg, #000 25%, rgb(0 0 0 / 0.15) 80%);
+  }
+
+  /* Faixa: um feixe de luz azul atravessa e as bordas somem nas pontas */
+  .faixa {
+    border-bottom: 0;
+    background:
+      radial-gradient(60% 140% at 50% 50%, rgb(214 234 244 / 0.55), rgb(214 234 244 / 0) 70%),
+      linear-gradient(90deg, #fdfefe, #fbfdfb);
+    background-repeat: no-repeat;
+    position: relative;
+  }
+
+  .faixa::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--linha-some);
+  }
+
+  /* Linhas das listas: somem nas pontas em vez de cortar seco */
+  .temas__lista {
+    border-top: 0;
+  }
+
+  .tema,
+  .tema:nth-child(-n + 2) {
+    border-image: var(--linha-some) 1;
+  }
+
+  .temas__lista > .tema:first-child {
+    border-top: 1px solid;
+  }
+
+  .tema__nome {
+    width: fit-content;
+    background: linear-gradient(90deg, #253f50 0%, #315f7c 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Passos: a linha nasce azul e se apaga para a direita */
+  .passo {
+    border-image: linear-gradient(90deg, #4a8ca7 0%, #c6d8e2 45%, rgb(198 216 226 / 0) 100%) 1;
+  }
+
+  /* Abordagem: brilho no topo e anéis partindo da onda */
+  .abordagem::before {
+    background:
+      linear-gradient(180deg, rgb(255 255 255 / 0.45) 0%, rgb(255 255 255 / 0) 140px),
+      linear-gradient(0deg, rgb(255 255 255 / 0.3) 0%, rgb(255 255 255 / 0) 100px),
+      radial-gradient(50rem 26rem at 85% 40%, rgb(240 248 252 / 0.6), rgb(240 248 252 / 0) 70%);
+  }
+
+  .abordagem::after {
+    --ax: 0%;
+    --ay: 100%;
+    background: repeating-radial-gradient(circle at var(--ax) var(--ay), transparent 0 39px, rgb(49 95 124 / 0.1) 39px 40px);
+    -webkit-mask-image: radial-gradient(40rem 28rem at var(--ax) var(--ay), #000 0%, transparent 70%);
+    mask-image: radial-gradient(40rem 28rem at var(--ax) var(--ay), #000 0%, transparent 70%);
+  }
+
+  .onda {
+    stroke: url(#onda-degrade);
+  }
+
+  /* Como funciona: luz fria no canto */
+  .processo {
+    background:
+      radial-gradient(40rem 24rem at 100% 0%, rgb(214 234 244 / 0.5), rgb(214 234 244 / 0) 70%),
+      linear-gradient(90deg, #f4f9fb 0%, #ffffff 55%);
+  }
+
+  /* Contato: brilho atrás do formulário e anéis que somem */
+  .contato::before {
+    background:
+      linear-gradient(180deg, rgb(255 255 255 / 0.4) 0%, rgb(255 255 255 / 0) 140px),
+      radial-gradient(36rem 30rem at 78% 50%, rgb(240 248 252 / 0.7), rgb(240 248 252 / 0) 70%);
+  }
+
+  .contato::after {
+    --kx: 100%;
+    --ky: 0%;
+    background: repeating-radial-gradient(circle at var(--kx) var(--ky), transparent 0 47px, rgb(49 95 124 / 0.11) 47px 48px);
+    -webkit-mask-image: radial-gradient(40rem 30rem at var(--kx) var(--ky), #000 0%, transparent 75%);
+    mask-image: radial-gradient(40rem 30rem at var(--kx) var(--ky), #000 0%, transparent 75%);
+  }
+
+  .campo input,
+  .campo textarea {
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbfd 100%);
+  }
+
+  /* Rodapé: a borda de cima some nas pontas */
+  .rodape {
+    position: relative;
+    border-top: 0;
+  }
+
+  .rodape::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, rgb(184 208 221 / 0), #a9c4d6 20%, #a9c4d6 80%, rgb(184 208 221 / 0));
+  }
+
+  @media (width > 900px) {
+    .inicio {
+      --cx: 76%;
+      --cy: 50%;
+    }
+  }
+}
+
+@media (forced-colors: active) {
+  .tema__nome {
+    background: none;
+    -webkit-text-fill-color: currentColor;
+  }
+
+  .inicio::before,
+  .inicio::after,
+  .abordagem::before,
+  .abordagem::after,
+  .contato::before,
+  .contato::after {
+    display: none;
+  }
+}
+
+/* =====================================================================
+   Destaque terracota (print de 04/11, 14:22): o tom quente da foto
+   espalhado pelo site. Os botões continuam azuis ("Usar no botão" desligado).
+   Suave: fundos e selos. Médio: ícones, linhas e números. Forte: textos.
+   ===================================================================== */
+@layer components {
+  :root {
+    --destaque-suave: #f7eae3;
+    --destaque: #be775a;
+    --destaque-forte: #97553d;
+    /* texto pequeno sobre as faixas azuis: mais escuro para manter o AA */
+    --destaque-no-azul: #864a34;
+  }
+
+  ::selection {
+    background: rgb(190 119 90 / 0.22);
+  }
+
+  /* Sobretítulos em terracota no site todo */
+  .sobretitulo {
+    color: var(--destaque-forte);
+  }
+
+  .abordagem .sobretitulo,
+  .contato .sobretitulo {
+    color: var(--destaque-no-azul);
+  }
+
+  /* Título da abertura: "com calma" em itálico terracota */
+  .inicio__titulo em {
+    font-style: italic;
+    color: var(--destaque-forte);
+    -webkit-text-fill-color: var(--destaque-forte);
+  }
+
+  /* Links e menu */
+  .link-sublinhado {
+    text-decoration-color: var(--destaque);
+  }
+
+  .link-sublinhado:hover {
+    color: var(--destaque-forte);
+  }
+
+  .menu a:hover {
+    color: var(--destaque-forte);
+    text-decoration-color: var(--destaque);
+  }
+
+  .menu-movel li a:not(.botao):hover {
+    color: var(--destaque-forte);
+  }
+
+  /* Ícones */
+  .inicio__meta svg,
+  .botao--claro svg {
+    color: var(--destaque);
+  }
+
+  /* Abertura: luz quente atrás da foto e anéis em terracota */
+  .inicio::before {
+    background:
+      radial-gradient(38rem 30rem at var(--cx) var(--cy), rgb(247 234 227 / 0.85), rgb(247 234 227 / 0) 70%),
+      radial-gradient(30rem 22rem at 8% 0%, rgb(196 222 238 / 0.55), rgb(196 222 238 / 0) 70%);
+  }
+
+  .inicio::after {
+    background: repeating-radial-gradient(
+      circle at var(--cx) var(--cy),
+      transparent 0 47px,
+      rgb(190 119 90 / 0.2) 47px 48px
+    );
+  }
+
+  .retrato__quadro {
+    background: linear-gradient(180deg, #f1e6dc 0%, var(--destaque-suave) 100%);
+  }
+
+  .retrato__anel {
+    border-color: var(--destaque);
+  }
+
+  .retrato__legenda {
+    background: linear-gradient(180deg, rgb(190 119 90 / 0.14), rgb(190 119 90 / 0));
+  }
+
+  /* Faixa: o feixe de luz fica quente */
+  .faixa {
+    background:
+      radial-gradient(60% 140% at 50% 50%, rgb(247 234 227 / 0.9), rgb(247 234 227 / 0) 70%),
+      linear-gradient(90deg, #fdfefe, #fbfdfb);
+    background-repeat: no-repeat;
+  }
+
+  .faixa::after {
+    background: linear-gradient(90deg, rgb(190 119 90 / 0), rgb(190 119 90 / 0.45) 30%, var(--linha) 70%, rgb(200 217 229 / 0));
+  }
+
+  /* Temas: um ponto terracota antes de cada tema */
+  .tema__nome {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .tema__nome::before {
+    content: '';
+    flex: none;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--destaque), var(--destaque-forte));
+  }
+
+  .tema,
+  .tema:nth-child(-n + 2) {
+    border-image: linear-gradient(90deg, rgb(190 119 90 / 0) 0%, rgb(190 119 90 / 0.4) 12%, var(--linha) 45%, var(--linha) 86%, rgb(200 217 229 / 0) 100%) 1;
+  }
+
+  /* Sobre: brilho quente no canto e linha de cima em terracota */
+  .sobre {
+    background:
+      radial-gradient(34rem 24rem at 0% 100%, rgb(247 234 227 / 0.8), rgb(247 234 227 / 0) 70%),
+      linear-gradient(115deg, #f3f8fb 0%, #fdfefe 45%, #f7fafc 100%);
+  }
+
+  .sobre::before {
+    background: linear-gradient(90deg, rgb(190 119 90 / 0), rgb(190 119 90 / 0.5) 25%, #d5e2ea 60%, rgb(213 226 234 / 0));
+  }
+
+  .sobre__funcao {
+    color: var(--destaque-forte);
+  }
+
+  /* Abordagem: frase final em terracota e um calor no canto dos anéis */
+  .abordagem__texto .abordagem__frase {
+    color: var(--destaque-no-azul);
+  }
+
+  .abordagem::before {
+    background:
+      linear-gradient(180deg, rgb(255 255 255 / 0.45) 0%, rgb(255 255 255 / 0) 140px),
+      linear-gradient(0deg, rgb(255 255 255 / 0.3) 0%, rgb(255 255 255 / 0) 100px),
+      radial-gradient(30rem 20rem at 0% 100%, rgb(247 234 227 / 0.7), rgb(247 234 227 / 0) 70%),
+      radial-gradient(50rem 26rem at 85% 40%, rgb(240 248 252 / 0.6), rgb(240 248 252 / 0) 70%);
+  }
+
+  .abordagem::after {
+    background: repeating-radial-gradient(circle at var(--ax) var(--ay), transparent 0 39px, rgb(190 119 90 / 0.16) 39px 40px);
+  }
+
+  /* Passos: números e linha em terracota */
+  .passo__numero {
+    color: var(--destaque-forte);
+    background: linear-gradient(90deg, var(--destaque-forte) 0%, var(--destaque) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+
+  .passo {
+    border-image: linear-gradient(90deg, var(--destaque) 0%, #c6d8e2 45%, rgb(198 216 226 / 0) 100%) 1;
+  }
+
+  .processo {
+    background:
+      radial-gradient(40rem 24rem at 100% 0%, rgb(214 234 244 / 0.5), rgb(214 234 244 / 0) 70%),
+      radial-gradient(30rem 20rem at 0% 100%, rgb(247 234 227 / 0.55), rgb(247 234 227 / 0) 70%),
+      linear-gradient(90deg, #f4f9fb 0%, #ffffff 55%);
+  }
+
+  /* Contato: anéis quentes e a confirmação com selo terracota */
+  .contato::after {
+    background: repeating-radial-gradient(circle at var(--kx) var(--ky), transparent 0 47px, rgb(190 119 90 / 0.16) 47px 48px);
+  }
+
+  .contato__aviso {
+    border-color: rgb(190 119 90 / 0.35);
+    background: linear-gradient(180deg, #fffdfc 0%, var(--destaque-suave) 100%);
+  }
+
+  /* Rodapé: linha de cima com um toque quente */
+  .rodape::before {
+    background: linear-gradient(90deg, rgb(190 119 90 / 0), rgb(190 119 90 / 0.5) 20%, #a9c4d6 55%, #a9c4d6 80%, rgb(184 208 221 / 0));
+  }
+}
+
+/* =====================================================================
+   Sobre: foto em arco e formação · Depoimentos (exemplos fictícios)
+   ===================================================================== */
+@layer components {
+  .sobre__foto {
+    margin-top: 40px;
+    max-width: 420px;
+  }
+
+  .sobre__foto-quadro {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .sobre__foto-quadro img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 736 / 981;
+    object-fit: cover;
+    border-radius: 999px 999px 12px 12px;
+    background: var(--destaque-suave);
+    -webkit-mask-image: linear-gradient(180deg, #000 70%, rgb(0 0 0 / 0.6) 88%, rgb(0 0 0 / 0.15) 100%);
+    mask-image: linear-gradient(180deg, #000 70%, rgb(0 0 0 / 0.6) 88%, rgb(0 0 0 / 0.15) 100%);
+  }
+
+  .sobre__foto-anel {
+    position: absolute;
+    z-index: -1;
+    top: -5%;
+    right: -9%;
+    width: 78%;
+    aspect-ratio: 1;
+    border: 1px solid var(--destaque);
+    border-radius: 50%;
+    -webkit-mask-image: linear-gradient(200deg, #000 20%, transparent 75%);
+    mask-image: linear-gradient(200deg, #000 20%, transparent 75%);
+  }
+
+  .trajetoria {
+    margin-top: 44px;
+  }
+
+  .trajetoria__titulo {
+    font-size: 22px;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+
+  .trajetoria__lista {
+    margin-top: 18px;
+  }
+
+  .trajetoria__item {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 16px;
+    padding-block: 13px;
+    border-top: 1px solid;
+    border-image: linear-gradient(90deg, var(--destaque) 0%, var(--linha) 35%, rgb(200 217 229 / 0) 100%) 1;
+    font-size: 15px;
+    line-height: 24px;
+  }
+
+  .trajetoria__ano {
+    font-family: var(--font-serif);
+    font-size: 17px;
+    color: var(--destaque-forte);
+  }
+
+  /* Depoimentos */
+  .depoimentos {
+    background:
+      radial-gradient(40rem 26rem at 10% 0%, rgb(247 234 227 / 0.9), rgb(247 234 227 / 0) 70%),
+      radial-gradient(36rem 24rem at 95% 100%, rgb(214 234 244 / 0.6), rgb(214 234 244 / 0) 70%),
+      linear-gradient(180deg, #fdfbfa 0%, #f8fafb 100%);
+  }
+
+  .depoimentos__lista {
+    display: grid;
+    gap: 40px 48px;
+    margin-top: 44px;
+  }
+
+  .depoimento figure {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding-top: 18px;
+    border-top: 1px solid;
+    border-image: linear-gradient(90deg, var(--destaque) 0%, #e3d3ca 45%, rgb(227 211 202 / 0) 100%) 1;
+  }
+
+  .depoimento__aspas {
+    display: block;
+    width: fit-content;
+    height: 44px;
+    font-family: var(--font-serif);
+    font-size: 72px;
+    line-height: 1;
+    background: linear-gradient(135deg, var(--destaque) 0%, var(--destaque-forte) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .depoimento__texto {
+    margin-top: 10px;
+    font-family: var(--font-serif);
+    font-size: 19px;
+    font-style: italic;
+    line-height: 31px;
+    color: var(--tinta);
+  }
+
+  .depoimento__autor {
+    margin-top: auto;
+    padding-top: 20px;
+    font-size: 13px;
+    line-height: 20px;
+    color: var(--destaque-forte);
+  }
+
+  @media (width > 760px) {
+    .depoimentos__lista {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (width > 900px) {
+    .sobre__foto {
+      margin-top: 48px;
+    }
+  }
+}
+
+@media (forced-colors: active) {
+  .depoimento__aspas {
+    background: none;
+    -webkit-text-fill-color: currentColor;
+  }
+}
+
+/* Reduzir movimento: sem animações nem transições */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
